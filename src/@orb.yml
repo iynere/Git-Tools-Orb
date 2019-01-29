@@ -36,9 +36,12 @@ commands:
             then
               echo "The current build is not a Pull Request. If you intend to open an pull request after this commit, all following commits will be commented"
             else
-              curl -H "Authorization: token ${GITHUB_TOKEN}" -X POST \
-              -d "{\"body\": \"Hello world\"}" \
-              "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/CIRCLE_PR_NUMBER"
+              echo $CIRCLE_PROJECT_USERNAME
+              echo $CIRCLE_PROJECT_REPONAME
+              echo $CIRCLE_PR_NUMBER
+              # curl -H "Authorization: token ${VCS_TOKEN}" -X POST \
+              # -d "{\"body\": \"Hello world\"}" \
+              # "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${CIRCLE_PR_NUMBER}"
             fi
 
 ######
