@@ -1,0 +1,53 @@
+version: 2.1
+
+description: |
+  Collection of useful Git-related tools for all VCS providers
+
+###########
+#EXECUTORS#
+###########
+# Executors are used to define environments in which jobs are ran
+
+executors:
+  default:
+    description: Basic container for running CircleCI commands.
+    docker:
+      - image: circleci/circleci-cli
+
+##########
+#COMMANDS#
+##########
+# Commands are executed within jobs to perform tasks
+
+commands:
+  #1
+  prcomment:
+    description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment."
+    parameters:
+      token:
+        description: "GitHub API token for accessing issue comments endpoint. This should be set to $VCS_TOKEN"
+        type: string
+        default: ${VCS_TOKEN}
+    steps:
+      - run:
+          name: "Commenting Pull Request"
+          command: |
+            if [ -z $CIRCLE_PULL_REQUEST ]
+            then
+              echo $CIRCLE_PULL_REQUEST
+            else
+              echo "This is not a pull request. If you intend to open an pull request after this commit, all following commits will be commented"
+              echo exit 1
+            fi
+
+######
+#JOBS#
+######
+# Jobs initiate a set of commands
+
+# jobs:
+#   prcomment:
+#     description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment."
+#     executor: default
+#     steps:
+#       - git-tools-orb/prcomment
