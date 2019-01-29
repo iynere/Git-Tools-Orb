@@ -22,7 +22,7 @@ executors:
 commands:
   #1
   prcomment:
-    description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment."
+    description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment. Only available for GitHub"
     parameters:
       token:
         description: "GitHub API token for accessing issue comments endpoint. This should be set to $VCS_TOKEN"
@@ -34,10 +34,11 @@ commands:
           command: |
             if [ -z $CIRCLE_PULL_REQUEST ]
             then
-              echo $CIRCLE_PULL_REQUEST
+              echo "The current build is not a Pull Request. If you intend to open an pull request after this commit, all following commits will be commented"
             else
-              echo "This is not a pull request. If you intend to open an pull request after this commit, all following commits will be commented"
-              echo exit 1
+              curl -H "Authorization: token ${GITHUB_TOKEN}" -X POST \
+              -d "{\"body\": \"Hello world\"}" \
+              "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/CIRCLE_PR_NUMBER"
             fi
 
 ######
@@ -47,7 +48,7 @@ commands:
 
 jobs:
   prcomment:
-    description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment."
+    description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment. Only available for GitHub"
     executor: default
     steps:
       - prcomment
