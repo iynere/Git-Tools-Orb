@@ -45,9 +45,9 @@ commands:
 ######
 # Jobs initiate a set of commands
 
-# jobs:
-#   prcomment:
-#     description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment."
-#     executor: default
-#     steps:
-#       - git-tools-orb/prcomment
+jobs:
+  prcomment:
+    description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment."
+    executor: default
+    steps:
+      - prcomment
