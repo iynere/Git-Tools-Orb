@@ -31,9 +31,7 @@ commands:
             #
             # Set VCS_TYPE
             echo "Setting VCS_TYPE"
-            echo $CIRCLE_PULL_REQUEST | awk -F[/:] '{print $4}'
-            echo $CIRCLE_PULL_REQUEST | awk -F[/:] '{print $4}' | awk -F[.] '{print $1}'
-            VCS_TYPE=$(echo $CIRCLE_PULL_REQUEST | awk -F[/:] '{print $4}' | awk -F[.] '{print $1}')
+            echo "export VCS_TYPE=$(echo $CIRCLE_PULL_REQUEST | awk -F[/:] '{print $4}' | awk -F[.] '{print $1}')" >> ~/.bashrc
   #2
   prcomment:
     description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment. Only available for GitHub"
@@ -47,6 +45,7 @@ commands:
       - run:
           name: "Commenting Pull Request"
           command: |
+            source ~/.bashrc
             if [ -z $CIRCLE_PULL_REQUEST ]
             then
               # The current commit is not a PR
