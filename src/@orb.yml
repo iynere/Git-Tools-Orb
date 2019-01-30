@@ -33,7 +33,7 @@ commands:
             echo "Setting VCS_TYPE"
             VCS_TYPE=$(echo $CIRCLE_PULL_REQUEST | awk -F[/:] '{print $4}' | awk -F[.] '{print $1}')
             echo "VCS_TYPE is set to " $VCS_TYPE
-            echo "export VCS_TYPE=${VCS_TYPE}" >> ~/.bashrc
+            echo 'export VCS_TYPE="${VCS_TYPE}"' >> ~/.bashrc
   #2
   prcomment:
     description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment. Only available for GitHub"
