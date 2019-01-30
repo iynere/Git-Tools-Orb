@@ -21,6 +21,17 @@ executors:
 
 commands:
   #1
+  git-tools-setup:
+    description: "Configure settings for multi-VCS support."
+    steps:
+      - run:
+          name: "Git-Tools Setup"
+          command: |
+            # Setup any needed ENV VARS for all other commands here.
+            #
+            # Set VCS_TYPE
+            VCS_TYPE=$(echo ${CIRCLE_PULL_REQUEST} | awk -F[/:] '{print $4}' | awk -F[.] '{print $1}')
+  #2
   prcomment:
     description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment. Only available for GitHub"
     parameters:
@@ -34,11 +45,12 @@ commands:
           command: |
             if [ -z $CIRCLE_PULL_REQUEST ]
             then
+              # The current commit is not a PR
               echo "The current build is not a Pull Request. If you intend to open an pull request after this commit, all following commits will be commented"
             else
-              echo $CIRCLE_PROJECT_USERNAME
-              echo $CIRCLE_PROJECT_REPONAME
-              echo $CIRCLE_PR_NUMBER
+              # Comment on pull request
+              echo $VCS_TYPE
+              echo $CIRCLE_PULL_REQUEST
               # curl -H "Authorization: token ${VCS_TOKEN}" -X POST \
               # -d "{\"body\": \"Hello world\"}" \
               # "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${CIRCLE_PR_NUMBER}"
