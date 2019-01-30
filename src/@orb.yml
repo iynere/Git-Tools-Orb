@@ -31,6 +31,7 @@ commands:
             #
             # Set VCS_TYPE
             echo "Setting VCS_TYPE"
+            echo $CIRCLE_PULL_REQUEST | awk -F[/:] '{print $4}'
             echo $CIRCLE_PULL_REQUEST | awk -F[/:] '{print $4}' | awk -F[.] '{print $1}'
             VCS_TYPE=$(echo $CIRCLE_PULL_REQUEST | awk -F[/:] '{print $4}' | awk -F[.] '{print $1}')
   #2
