@@ -47,6 +47,7 @@ commands:
       - run:
           name: "Commenting Pull Request"
           command: |
+            tail -1 ~/.bashrc
             source ~/.bashrc
             if [ -z $CIRCLE_PULL_REQUEST ]
             then
