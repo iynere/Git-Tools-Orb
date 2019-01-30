@@ -48,8 +48,9 @@ commands:
           name: "Commenting Pull Request"
           command: |
             tail -1 ~/.bashrc
-            printenv
             source ~/.bashrc
+            echo "SOURCED PATH. VCS_TOKEN should be valid "
+            printenv
             if [ -z $CIRCLE_PULL_REQUEST ]
             then
               # The current commit is not a PR
