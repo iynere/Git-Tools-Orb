@@ -30,6 +30,7 @@ commands:
             # Setup any needed ENV VARS for all other commands here.
             #
             # Set VCS_TYPE
+            echo "Setting VCS_TYPE"
             VCS_TYPE=$(echo ${CIRCLE_PULL_REQUEST} | awk -F[/:] '{print $4}' | awk -F[.] '{print $1}')
   #2
   prcomment:
@@ -50,7 +51,7 @@ commands:
               echo "The current build is not a Pull Request. If you intend to open an pull request after this commit, all following commits will be commented"
             else
               # Comment on pull request
-              echo $VCS_TYPE
+              echo "VCS TYPE: " $VCS_TYPE
               echo $CIRCLE_PULL_REQUEST
               # curl -H "Authorization: token ${VCS_TOKEN}" -X POST \
               # -d "{\"body\": \"Hello world\"}" \
