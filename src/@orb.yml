@@ -87,7 +87,7 @@ commands:
                 fi
                 # Curl Request to post comment to PR
                 curl -s -H "Authorization: token ${VCS_TOKEN}" -X POST \
-                -d "{\"body\": \"Hello world ${PRCOMMENT_LOG\"}" \
+                -d "{\"body\": \"Hello world ${PRCOMMENT_LOG}\"}" \
                 "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${GITHUB_PR_NUM}"
               elif [ $VCS_TYPE == "bitbucket" ]
               then
