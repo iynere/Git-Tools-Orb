@@ -8,7 +8,8 @@ description: |
 ###############
 # - Bash
 # - Awk
-# - 
+# - GitHub Personal Access Token
+#   - Requires Admin access to Repos
 
 ###########
 #EXECUTORS#
@@ -41,6 +42,11 @@ commands:
             VCS_TYPE=$(echo $CIRCLE_PULL_REQUEST | awk -F[/:] '{print $4}' | awk -F[.] '{print $1}')
             echo "VCS_TYPE is set to " $VCS_TYPE
             echo "export VCS_TYPE="${VCS_TYPE}"" >> $BASH_ENV
+            # Fetch GIT_COMMIT_MESSAGE
+            mkdir -p ~/git-tools-orb/meta
+            cd ~/git-tools-orb/meta
+            git clone --no-checkout $CIRCLE_REPOSITORY_URL
+            cd ~/
   #2
   prcomment:
     description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment. Only available for GitHub"
@@ -49,6 +55,14 @@ commands:
         description: "GitHub API token for accessing issue comments endpoint. This should be set to $VCS_TOKEN"
         type: string
         default: ${VCS_TOKEN}
+      comment:
+          description: "The comment to be submit to the PR request upon commit. By default, this will be the commit message"
+          type: string
+          default: ${VCS_COMMIT_MESSAGE}
+      log_path:
+        description: "path to logfile. Log file contents will be included in contents. Only the last 6 lines will be included"
+        type: string
+        default: ""
     steps:
       - git-tools-setup
       - run:
@@ -68,9 +82,16 @@ commands:
                 echo "GitHub PR Comment Module"
                 # Fetch PR Number
                 GITHUB_PR_NUM=$(echo $CIRCLE_PULL_REQUEST | rev | awk -F[/] '{print $1}')
+                # Fetch log
+                PRCOMMENT_LOGPATH=<<paramters.log_path>>
+                if [ -z $PRCOMMENT_LOGPATH ]
+                then
+                else
+                  PRCOMMENT_LOG=$(echo $PRCOMMENT_LOGPATH | tail -6)
+                fi
                 # Curl Request to post comment to PR
                 curl -s -H "Authorization: token ${VCS_TOKEN}" -X POST \
-                -d "{\"body\": \"Hello world\"}" \
+                -d "{\"body\": \"Hello world ${PRCOMMENT_LOG\"}" \
                 "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${GITHUB_PR_NUM}"
               elif [ $VCS_TYPE == "bitbucket" ]
               then
