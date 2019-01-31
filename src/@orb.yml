@@ -81,9 +81,8 @@ commands:
                 GITHUB_PR_NUM=$(echo $CIRCLE_PULL_REQUEST | rev | awk -F[/] '{print $1}')
                 # Fetch log
                 PRCOMMENT_LOGPATH=<<paramters.log_path>>
-                if [ -z $PRCOMMENT_LOGPATH ]
+                if [ ! -z $PRCOMMENT_LOGPATH ]
                 then
-                else
                   PRCOMMENT_LOG=$(echo $PRCOMMENT_LOGPATH | tail -6)
                 fi
                 # Curl Request to post comment to PR
