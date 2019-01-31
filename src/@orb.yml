@@ -3,6 +3,13 @@ version: 2.1
 description: |
   Collection of useful Git-related tools for all VCS providers
 
+###############
+#REQUIREMENTS#
+###############
+# - Bash
+# - Awk
+# - 
+
 ###########
 #EXECUTORS#
 ###########
@@ -59,6 +66,12 @@ commands:
               then
                 # GitHub PR Comment Module
                 echo "GitHub PR Comment Module"
+                # Fetch PR Number
+                GITHUB_PR_NUM=$(echo $CIRCLE_PULL_REQUEST | rev | awk -F[/] '{print $1}')
+                # Curl Request to post comment to PR
+                curl -s -H "Authorization: token ${VCS_TOKEN}" -X POST \
+                -d "{\"body\": \"Hello world\"}" \
+                "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${GITHUB_PR_NUM}" > /dev/null
               elif [ $VCS_TYPE == "bitbucket" ]
               then
                 # BitBucket PR Comment Module
@@ -66,10 +79,7 @@ commands:
               else
                 echo "The VCS type is not yet supported."
               fi
-              echo "VCS TYPE: ${VCS_TYPE}"
-              # curl -H "Authorization: token ${VCS_TOKEN}" -X POST \
-              # -d "{\"body\": \"Hello world\"}" \
-              # "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${CIRCLE_PR_NUMBER}"
+              
             fi
 
 ######
