@@ -55,12 +55,14 @@ commands:
             else
               # Comment on pull request
               #
-              if [ $VCS_TYPE == "github"]
+              if [ $VCS_TYPE == "github" ]
               then
                 # GitHub PR Comment Module
-              elif [ $VCS_TYPE == "bitbucket"]
+                echo "GitHub PR Comment Module"
+              elif [ $VCS_TYPE == "bitbucket" ]
               then
                 # BitBucket PR Comment Module
+                echo "BitBucket PR Comment Module"
               else
                 echo "The VCS type is not yet supported."
               fi
