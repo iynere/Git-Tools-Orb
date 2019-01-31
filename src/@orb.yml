@@ -43,10 +43,7 @@ commands:
             echo "VCS_TYPE is set to " $VCS_TYPE
             echo "export VCS_TYPE="${VCS_TYPE}"" >> $BASH_ENV
             # Fetch GIT_COMMIT_MESSAGE
-            mkdir -p ~/git-tools-orb/meta
-            cd ~/git-tools-orb/meta
-            git clone --no-checkout $CIRCLE_REPOSITORY_URL
-            cd ~/
+            find .git
   #2
   prcomment:
     description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment. Only available for GitHub"
@@ -113,4 +110,5 @@ jobs:
     description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment. Only available for GitHub"
     executor: default
     steps:
+      - checkout
       - prcomment
