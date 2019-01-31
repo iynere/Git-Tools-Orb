@@ -1,5 +1,5 @@
 version: 2.1
-# Testing Curl
+# Detecting what information can be gained from local .git.
 
 orbs:
   git-tools: sandbox/git-tools@dev:first
