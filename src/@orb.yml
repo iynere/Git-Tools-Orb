@@ -33,7 +33,7 @@ commands:
             echo "Setting VCS_TYPE"
             VCS_TYPE=$(echo $CIRCLE_PULL_REQUEST | awk -F[/:] '{print $4}' | awk -F[.] '{print $1}')
             echo "VCS_TYPE is set to " $VCS_TYPE
-            echo "export VCS_TYPE="${VCS_TYPE}"" >> ~/.bashrc
+            echo "export VCS_TYPE="${VCS_TYPE}"" >> $BASH_ENV
   #2
   prcomment:
     description: "If the current commit is a part of a pull request, the commit message will be added to the PR as a comment. Only available for GitHub"
@@ -47,18 +47,24 @@ commands:
       - run:
           name: "Commenting Pull Request"
           command: |
-            tail -1 ~/.bashrc
-            source ~/.bashrc
-            echo "SOURCED PATH. VCS_TOKEN should be valid "
-            printenv
+            echo $VCS_TYPE
             if [ -z $CIRCLE_PULL_REQUEST ]
             then
               # The current commit is not a PR
               echo "The current build is not a Pull Request. If you intend to open an pull request after this commit, all following commits will be commented"
             else
               # Comment on pull request
+              #
+              if [ $VCS_TYPE == "github"]
+              then
+                # GitHub PR Comment Module
+              elif [ $VCS_TYPE == "bitbucket"]
+              then
+                # BitBucket PR Comment Module
+              else
+                echo "The VCS type is not yet supported."
+              fi
               echo "VCS TYPE: ${VCS_TYPE}"
-              echo $CIRCLE_PULL_REQUEST
               # curl -H "Authorization: token ${VCS_TOKEN}" -X POST \
               # -d "{\"body\": \"Hello world\"}" \
               # "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${CIRCLE_PR_NUMBER}"
