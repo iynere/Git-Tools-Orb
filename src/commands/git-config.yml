@@ -1,0 +1,28 @@
+description: >
+  Configure your git user.name and user.email, for interacting with
+  GitHub repositories. Currently does not support Bitbucket.
+
+parameters:
+  user-name:
+    type: string
+    default: $CIRCLE_USERNAME
+    description: >
+      Value for `git config --global user.name`. Defaults to the value of
+      $CIRCLE_USERNAME (the username of the user who triggered the build):
+      https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+
+  user-email:
+    type: string
+    default: $CIRCLE_USERNAME@users.noreply.github.com
+    description: >
+      Value for `git config --global user.email`. By default, incorporates
+      the value of $CIRCLE_USERNAME (the username of the user who triggered
+      the build):
+      https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+
+steps:
+  - run:
+      name: Git Config
+      command: |
+        git config --global user.name "<<parameters.user-name>>"
+        git config --global user.email "<<parameters.user-email>>"
